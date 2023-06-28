@@ -4,6 +4,9 @@ dependencies:
   '@notionhq/client':
     specifier: ^2.2.5
     version: 2.2.5
+  '@plasmohq/storage':
+    specifier: ^1.6.1
+    version: 1.6.1(react@18.2.0)
   '@radix-ui/react-scroll-area':
     specifier: ^1.0.4
     version: 1.0.4(@types/react-dom@18.2.4)(@types/react@18.2.7)(react-dom@18.2.0)(react@18.2.0)
@@ -1962,6 +1965,18 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@plasmohq/storage@1.6.1(react@18.2.0):
+    resolution: {integrity: sha512-FgykO3m5YhOBA/xANpsLTGGKkBD1uVmymnG7aMck4BS962Tz+bDv476NFVoSrOtduadBpRFTsBAsyXUMdY8YKA==}
+    peerDependencies:
+      react: ^16.8.6 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      pify: 6.1.0
+      react: 18.2.0
+    dev: false
 
   /@pnpm/config.env-replace@1.1.0:
     resolution: {integrity: sha512-htyl8TWnKL7K/ESFa1oW2UB5lVDxuF5DpM7tBi6Hu2LNL3mWkIzNLG6N4zoCUP1lCKNxWy/3iu8mS8MvToGd6w==}
@@ -4793,6 +4808,11 @@ packages:
     engines: {node: '>=6'}
     dev: false
     optional: true
+
+  /pify@6.1.0:
+    resolution: {integrity: sha512-KocF8ve28eFjjuBKKGvzOBGzG8ew2OqOOSxTTZhirkzH7h3BI1vyzqlR0qbfcDBve1Yzo3FVlWUAtCRrbVN8Fw==}
+    engines: {node: '>=14.16'}
+    dev: false
 
   /pirates@4.0.5:
     resolution: {integrity: sha512-8V9+HQPupnaXMA23c5hvl69zXvTwTzyAYasnkb0Tts4XvO4CliqONMOnvlq26rkhLC3nWDFBJf73LU1e1VZLaQ==}
