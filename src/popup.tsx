@@ -1,12 +1,23 @@
 import { useState } from "react"
 import './index.css'
-import { openJike, openTwitter, openWeibo } from './openPage';
+import { openJike, openWeibo } from './openPage';
 import { setNoteToPublish } from "~utils/noteStorage";
 import { awaitSleep } from "~utils/content-utils";
+import { twitterSend } from "~utils/twitterSend";
 
 function IndexPopup() {
   const [content, setContent] = useState('')
-  const [errMsg, setErrMsg] = useState('')
+  const [infoMsg, setInfoMsg] = useState<AlertMsg>(null)
+
+  // 设置消息，5秒后自动消失
+  const setAlertMsg = (msg: AlertMsg) => {
+    setInfoMsg(msg)
+    if (msg !== null) {
+      awaitSleep(5000).then(() => {
+        setInfoMsg(null)
+      })
+    }
+  }
 
   // 内容修改
   const onContentChange = (e: any) => {
@@ -17,21 +28,35 @@ function IndexPopup() {
   const doSend = async () => {
     // 检查内容是否为空
     if (content === '') {
-      setErrMsg('内容不能为空')
+      setAlertMsg({
+        msg: '内容不能为空',
+        type: 'error'
+      })
       return
     }
-
-    setErrMsg('');
 
     await setNoteToPublish(content)
 
     openJike();
-    await awaitSleep(5000)
-
     openWeibo();
-    await awaitSleep(5000)
 
-    openTwitter();
+    // await twitterSend();
+
+    setAlertMsg({
+      msg: '执行发布',
+      type: 'success'
+    })
+  }
+
+  const msgColor = (type: string) => {
+    switch (type) {
+      case 'success':
+        return 'text-green-500'
+      case 'error':
+        return 'text-red-500'
+      default:
+        return 'text-gray-500'
+    }
   }
 
   return (
@@ -45,8 +70,8 @@ function IndexPopup() {
       <div className="mt-5">
         <textarea
           className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3" style={{
-          height: "240px",
-        }}
+            height: "240px",
+          }}
           placeholder="请输入内容"
           value={content}
           onChange={onContentChange}
@@ -54,8 +79,8 @@ function IndexPopup() {
       </div>
       {/* 显示错误消息 */}
       {
-        errMsg !== '' && (
-          <div className="mt-2 text-red-500 text-sm">{errMsg}</div>
+        infoMsg !== null && (
+          <div className={`mt-2 ${msgColor(infoMsg.type)} text-sm`}>{infoMsg.msg}</div>
         )
       }
       <div className="mt-5 px-5">
