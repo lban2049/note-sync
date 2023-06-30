@@ -4,6 +4,9 @@ dependencies:
   '@notionhq/client':
     specifier: ^2.2.5
     version: 2.2.5
+  '@plasmohq/messaging':
+    specifier: ^0.5.0
+    version: 0.5.0(react@18.2.0)
   '@plasmohq/storage':
     specifier: ^1.6.1
     version: 1.6.1(react@18.2.0)
@@ -1611,6 +1614,18 @@ packages:
 
   /@plasmohq/init@0.6.4:
     resolution: {integrity: sha512-zJVtRJiyqrxCfBhd0sUaJG/M0jhXlRjXQAekyCSrbgZWUFJNT08WyAwVmeIgS9Y3NoTY5kwT0mBuJb7Kykv0ag==}
+    dev: false
+
+  /@plasmohq/messaging@0.5.0(react@18.2.0):
+    resolution: {integrity: sha512-cYF750rguJDvnyJls2IHVAJTPVFtCEaMHMhnRsENfGaNqcRfXVfzwBGOABPg3k1iSBWBYLySh3Ht7QvFSnB3RQ==}
+    peerDependencies:
+      react: ^16.8.6 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      nanoid: 4.0.2
+      react: 18.2.0
     dev: false
 
   /@plasmohq/parcel-bundler@0.5.3:
@@ -4590,6 +4605,12 @@ packages:
     resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  /nanoid@4.0.2:
+    resolution: {integrity: sha512-7ZtY5KTCNheRGfEFxnedV5zFiORN1+Y1N6zvPTnHQd8ENUvfaDBeuJDZb2bN/oXwXxu3qkTXDzy57W5vAmDTBw==}
+    engines: {node: ^14 || ^16 || >=18}
+    hasBin: true
+    dev: false
 
   /napi-build-utils@1.0.2:
     resolution: {integrity: sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==}

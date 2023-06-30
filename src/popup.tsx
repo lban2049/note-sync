@@ -4,6 +4,7 @@ import { openJike, openWeibo } from './openPage';
 import { setNoteToPublish } from "~utils/noteStorage";
 import { awaitSleep } from "~utils/content-utils";
 import { twitterSend } from "~utils/twitterSend";
+import { sendToBackground } from "@plasmohq/messaging"
 
 function IndexPopup() {
   const [content, setContent] = useState('')
@@ -37,10 +38,18 @@ function IndexPopup() {
 
     await setNoteToPublish(content)
 
-    openJike();
-    openWeibo();
-
     // await twitterSend();
+
+    // openJike();
+    // openWeibo();
+
+    const resp = await sendToBackground({
+      name: 'send',
+      body: {}
+    })
+    
+    console.log(resp)
+
 
     setAlertMsg({
       msg: '执行发布',
