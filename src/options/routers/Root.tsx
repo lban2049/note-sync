@@ -5,7 +5,7 @@ export default function Root() {
   const getItemCss = ({isActive, isPending}) => {
     let css = 'text-gray-500';
     if (isActive) {
-      css = 'text-blue-500'
+      css = 'text-ar-600 font-bold'
     }
 
     // css += ' cursor-pointer';

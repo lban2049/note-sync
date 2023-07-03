@@ -1,8 +1,14 @@
 import { PLATFORM_TWITTER } from "~utils/constant";
 import { getNoteToPublish, removeNoteToPublish } from "~utils/noteStorage"
-import axios from 'axios'
+import { getTypefullyApiKey } from "./sysStorage";
 
 export async function twitterSend() {
+  const apiKey = await getTypefullyApiKey()
+  if (!apiKey) {
+    console.log('没有设置typefully的API Key')
+    return
+  }
+
   const note = await getNoteToPublish(PLATFORM_TWITTER)
   if (!note) {
     console.log('没有要发布的内容')
@@ -55,7 +61,7 @@ ${i + 1}/${newMsgs.length}`)
   const res = await fetch('https://api.typefully.com/v1/drafts/', {
     method: 'POST',
     headers: {
-      'X-API-KEY': 'Bearer t3qWUWBzJpV23lcp',
+      'X-API-KEY': `Bearer ${apiKey}`,
       'content-type': 'application/json'
     },
     body: JSON.stringify({
@@ -64,15 +70,6 @@ ${i + 1}/${newMsgs.length}`)
       "schedule-date": scheduleDate.toISOString()
     })
   })
-  // const res = await axios.post('https://api.typefully.com/v1/drafts/', {
-  //   "content": content,
-  //   "threadify": true,
-  //   "schedule-date": scheduleDate.toISOString()
-  // }, {
-  //   headers: {
-  //     'X-API-KEY': 'Bearer VRnnC0kzvOna0wDS'
-  //   }
-  // });
 
   if (res.status == 200) {
     await removeNoteToPublish(note.id)
