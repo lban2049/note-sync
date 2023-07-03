@@ -14,7 +14,7 @@ function IndexPopup() {
   const setAlertMsg = (msg: AlertMsg) => {
     setInfoMsg(msg)
     if (msg !== null) {
-      awaitSleep(5000).then(() => {
+      awaitSleep(5).then(() => {
         setInfoMsg(null)
       })
     }
@@ -37,11 +37,6 @@ function IndexPopup() {
     }
 
     await setNoteToPublish(content)
-
-    // await twitterSend();
-
-    // openJike();
-    // openWeibo();
 
     const resp = await sendToBackground({
       name: 'send',

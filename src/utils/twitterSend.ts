@@ -55,7 +55,7 @@ ${i + 1}/${newMsgs.length}`)
   const res = await fetch('https://api.typefully.com/v1/drafts/', {
     method: 'POST',
     headers: {
-      'X-API-KEY': 'Bearer VRnnC0kzvOna0wDS',
+      'X-API-KEY': 'Bearer t3qWUWBzJpV23lcp',
       'content-type': 'application/json'
     },
     body: JSON.stringify({

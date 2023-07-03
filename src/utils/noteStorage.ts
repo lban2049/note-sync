@@ -1,5 +1,6 @@
 import { Storage } from "@plasmohq/storage"
 import { PLATFORM_JIKE, PLATFORM_TWITTER, PLATFORM_WEIBO } from "./constant";
+import { awaitSleep } from "./content-utils";
 
 const storage = new Storage({
   area: "local"
@@ -21,11 +22,15 @@ export const setNoteToPublish = async (note: string) => {
     platform: PLATFORM_JIKE
   })
 
+  await awaitSleep(0.1)
+
   tasks.push({
     id: Date.now(),
     note,
     platform: PLATFORM_WEIBO
   })
+
+  await awaitSleep(0.1)
 
   tasks.push({
     id: Date.now(),
