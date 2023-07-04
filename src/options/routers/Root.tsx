@@ -13,7 +13,7 @@ export default function Root() {
   }
   return (
     <div className="p-5 max-w-5xl m-auto">
-      <div className="flex">
+      <div className="flex overflow-hidden">
         <div style={{
           width: 300,
         }} className="shrink-0">
@@ -29,7 +29,7 @@ export default function Root() {
             </ul>
           </nav>
         </div>
-        <div className="flex-1 pt-5">
+        <div className="flex-1 pt-5 overflow-hidden min-w-0">
           <Outlet />
         </div>
       </div>
