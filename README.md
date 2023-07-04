@@ -24,6 +24,12 @@ NoteSync 是一个浏览器插件，提供的功能是自动同步发布 twitter
 
 目前没有发布上架，试用可参考下方开发指南。
 
+## 界面
+
+![内容发布](./docs/img/options-publish.png)
+
+![配置](./docs/img/options-setting.png)
+
 ## 开发
 
 安装依赖(推荐使用pnpm)：
