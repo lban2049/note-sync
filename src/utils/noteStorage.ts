@@ -9,7 +9,7 @@ const storage = new Storage({
 const NOTETOPUBLISHKEY = "noteToPublish";
 
 // 设置待发布的笔记
-export const setNoteToPublish = async (note: string) => {
+export const setNoteToPublish = async (note: Note) => {
   // let tasks = await storage.get<Array<NoteTask>>(NOTETOPUBLISHKEY)
   // if (!tasks) {
   //   tasks = []
@@ -18,7 +18,8 @@ export const setNoteToPublish = async (note: string) => {
 
   tasks.push({
     id: Date.now(),
-    note,
+    note: note.content,
+    group: note.jikeGroup,
     platform: PLATFORM_JIKE
   })
 
@@ -26,7 +27,7 @@ export const setNoteToPublish = async (note: string) => {
 
   tasks.push({
     id: Date.now(),
-    note,
+    note: note.content,
     platform: PLATFORM_WEIBO
   })
 
@@ -34,7 +35,7 @@ export const setNoteToPublish = async (note: string) => {
 
   tasks.push({
     id: Date.now(),
-    note,
+    note: note.content,
     platform: PLATFORM_TWITTER
   })
 

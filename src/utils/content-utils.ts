@@ -67,7 +67,6 @@ export function splitForTwitter(content: string): string[] {
     }
 
     const tres = twitterText.parseTweet(msg)
-    console.log('tres', tres)
 
     // 推文超长，或者不够拼小尾巴时，分隔为两段
     if (!tres.valid || tres.weightedLength > 276) {
