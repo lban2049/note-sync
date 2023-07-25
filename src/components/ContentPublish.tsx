@@ -5,13 +5,17 @@ import {
   CrossCircledIcon
 } from "@radix-ui/react-icons"
 import * as Select from "@radix-ui/react-select"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { sendToBackground } from "@plasmohq/messaging"
 
 import { awaitSleep, splitForTwitter } from "~utils/content-utils"
 import { setNoteToPublish } from "~utils/noteStorage"
-import { getJikeGroup } from "~utils/sysStorage"
+import {
+  getJikeGroup,
+  getPublishContent,
+  setPublishContent
+} from "~utils/sysStorage"
 
 export default function ContentPublish() {
   const [content, setContent] = useState("")
@@ -21,16 +25,41 @@ export default function ContentPublish() {
   const [jikeGroup, setJikeGroup] = useState("")
   const [jikeGroupList, setJikeGroupList] = useState<string[]>([])
 
+  const isMounted = useRef(false)
+
   useEffect(() => {
     const initData = async () => {
       const group = (await getJikeGroup()) || ""
       const list = group.split(",")
-      list.push("")
       setJikeGroupList(list)
+
+      // 获取上次编辑内容
+      const note = await getPublishContent()
+      if (note) {
+        setContent(note.content)
+        setJikeGroup(note.jikeGroup)
+
+        handleTwitterPreview(note.content)
+      }
+
+      isMounted.current = true
     }
 
     initData()
   }, [])
+
+  // 更新缓存
+  useEffect(() => {
+    const doCache = async () => {
+      await cacheContent()
+    }
+
+    if (!isMounted.current) {
+      return
+    }
+
+    doCache()
+  }, [content, jikeGroup])
 
   // 设置消息，5秒后自动消失
   const setAlertMsg = (msg: AlertMsg) => {
@@ -43,9 +72,14 @@ export default function ContentPublish() {
   }
 
   // 内容修改
-  const onContentChange = (value: string) => {
+  const onContentChange = async (value: string) => {
     setContent(value)
 
+    handleTwitterPreview(value)
+  }
+
+  // 处理twitter 预览
+  const handleTwitterPreview = (value) => {
     if (!showTwitterPreview) {
       return
     }
@@ -56,7 +90,6 @@ export default function ContentPublish() {
     }
 
     const list = splitForTwitter(value)
-    console.log(list)
     setMsgList(list)
   }
 
@@ -89,6 +122,14 @@ export default function ContentPublish() {
     })
   }
 
+  // 缓存编辑内容
+  const cacheContent = async () => {
+    await setPublishContent({
+      content,
+      jikeGroup
+    })
+  }
+
   const msgColor = (type: string) => {
     switch (type) {
       case "success":
@@ -100,8 +141,8 @@ export default function ContentPublish() {
     }
   }
 
-  const onJikeGroupChange = (value: string) => {
-    console.log('group', value)
+  const onJikeGroupChange = async (value: string) => {
+    console.log("group", value)
     setJikeGroup(value)
   }
 
@@ -126,7 +167,7 @@ export default function ContentPublish() {
       <div className="mt-5 flex items-center">
         <label className="mr-2 text-base">即刻圈子</label>
         <Select.Root value={jikeGroup} onValueChange={onJikeGroupChange}>
-          <Select.Trigger className="outline-none w-48 h-10 text-center px-3 text-lg bg-ar-500 text-ar-50 rounded-md hover:bg-ar-600 flex items-center justify-between">
+          <Select.Trigger className="outline-none w-64 h-10 text-center px-3 text-lg bg-ar-500 text-ar-50 rounded-md hover:bg-ar-600 flex items-center justify-between">
             <Select.Value placeholder="选择圈子">
               {jikeGroup === "" ? "选择圈子" : jikeGroup}
             </Select.Value>
@@ -135,19 +176,28 @@ export default function ContentPublish() {
             </Select.Icon>
           </Select.Trigger>
           <Select.Portal>
-            <Select.Content position="popper" className="bg-white border border-ar-400 rounded-md shadow shadow-ar-400 w-48">
-              {
-                jikeGroupList.map((group) => {
-                  return (
-                    <Select.Item className="px-5 py-2 hover:bg-ar-100" value={group}>
-                      {group}
-                    </Select.Item>
-                  )
-                })
-              }
+            <Select.Content
+              position="popper"
+              className="bg-white border border-ar-400 rounded-md shadow shadow-ar-400 w-64">
+              {jikeGroupList.map((group, i) => {
+                return (
+                  <Select.Item
+                    className="px-5 py-2 hover:bg-ar-100"
+                    value={group}
+                    key={i}>
+                    {group}
+                  </Select.Item>
+                )
+              })}
             </Select.Content>
           </Select.Portal>
         </Select.Root>
+        {jikeGroup !== "" && (
+          <CrossCircledIcon
+            className="w-5 h-5 text-ar-500 cursor-pointer hover:text-ar-600 ml-2"
+            onClick={() => onJikeGroupChange("")}
+          />
+        )}
       </div>
       {/* 显示错误消息 */}
       {infoMsg !== null && (
