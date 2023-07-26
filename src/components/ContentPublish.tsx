@@ -12,8 +12,8 @@ import { sendToBackground } from "@plasmohq/messaging"
 import { awaitSleep, splitForTwitter } from "~utils/content-utils"
 import { setNoteToPublish } from "~utils/noteStorage"
 import {
-  getJikeGroup,
   getPublishContent,
+  getSysSetting,
   setPublishContent
 } from "~utils/sysStorage"
 
@@ -24,20 +24,37 @@ export default function ContentPublish() {
   const [msgList, setMsgList] = useState<string[]>([])
   const [jikeGroup, setJikeGroup] = useState("")
   const [jikeGroupList, setJikeGroupList] = useState<string[]>([])
+  const [selectTags, setSelectTags] = useState<string[]>([])
+  const [commonTags, setCommonTags] = useState<string[]>([])
 
   const isMounted = useRef(false)
 
   useEffect(() => {
     const initData = async () => {
-      const group = (await getJikeGroup()) || ""
+      let group = ""
+      let tags = ""
+      // 获取保存的配置
+      const setting = await getSysSetting()
+      if (setting) {
+        group = setting.jikeGroups
+        tags = setting.commonTags
+      }
+      console.log('setting', setting)
+
       const list = group.split(",")
       setJikeGroupList(list)
+
+      const tagList = tags.split(",")
+      setCommonTags(tagList)
+
+      console.log('list', list, 'tagList', tagList)
 
       // 获取上次编辑内容
       const note = await getPublishContent()
       if (note) {
-        setContent(note.content)
-        setJikeGroup(note.jikeGroup)
+        setContent(note.content || "")
+        setJikeGroup(note.jikeGroup || "")
+        setSelectTags(note.tags || [])
 
         handleTwitterPreview(note.content)
       }
@@ -59,7 +76,7 @@ export default function ContentPublish() {
     }
 
     doCache()
-  }, [content, jikeGroup])
+  }, [content, jikeGroup, selectTags])
 
   // 设置消息，5秒后自动消失
   const setAlertMsg = (msg: AlertMsg) => {
@@ -106,7 +123,8 @@ export default function ContentPublish() {
 
     await setNoteToPublish({
       content,
-      jikeGroup
+      jikeGroup,
+      tags: selectTags
     })
 
     const resp = await sendToBackground({
@@ -126,7 +144,8 @@ export default function ContentPublish() {
   const cacheContent = async () => {
     await setPublishContent({
       content,
-      jikeGroup
+      jikeGroup,
+      tags: selectTags
     })
   }
 
@@ -141,9 +160,14 @@ export default function ContentPublish() {
     }
   }
 
-  const onJikeGroupChange = async (value: string) => {
-    console.log("group", value)
+  const onJikeGroupChange = (value: string) => {
     setJikeGroup(value)
+  }
+
+  // 选择标签
+  const onSelectTag = (value: string) => {
+    // 将选择的标签，添加输入框中
+    onContentChange(content + " #" + value)
   }
 
   return (
@@ -165,8 +189,8 @@ export default function ContentPublish() {
         />
       </div>
       <div className="mt-5 flex items-center">
-        <label className="mr-2 text-base">即刻圈子</label>
-        <Select.Root value={jikeGroup} onValueChange={onJikeGroupChange}>
+        <label className="mr-2 text-base w-32">即刻圈子</label>
+        <Select.Root value={jikeGroup} onValueChange={onJikeGroupChange} name="jikeGroup">
           <Select.Trigger className="outline-none w-64 h-10 text-center px-3 text-lg bg-ar-500 text-ar-50 rounded-md hover:bg-ar-600 flex items-center justify-between">
             <Select.Value placeholder="选择圈子">
               {jikeGroup === "" ? "选择圈子" : jikeGroup}
@@ -198,6 +222,19 @@ export default function ContentPublish() {
             onClick={() => onJikeGroupChange("")}
           />
         )}
+      </div>
+      <div className="mt-5 flex items-center">
+        <label className="mr-2 text-base w-32">微博/twitter标签</label>
+        {commonTags.map((tag, i) => {
+          return (
+            <div
+              key={i}
+              onClick={() => onSelectTag(tag)}
+              className="px-3 py-1 border border-ar-500 text-black text-base rounded-md mr-2 flex items-center cursor-pointer bg-ar-100">
+              {"#" + tag}
+            </div>
+          )
+        })}
       </div>
       {/* 显示错误消息 */}
       {infoMsg !== null && (

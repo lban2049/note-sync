@@ -1,40 +1,62 @@
 import { EyeNoneIcon, EyeOpenIcon } from "@radix-ui/react-icons"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import {
-  getJikeGroup,
-  getTypefullyApiKey,
-  setStoreJikeGroup,
-  setTypefullyApiKey
+  setSysSetting,
+  getSysSetting,
 } from "~utils/sysStorage"
 
 export default function Settings() {
   const [apiKey, setApiKey] = useState("")
   const [showApiKey, setShowApiKey] = useState(false)
   const [jikeGroup, setJikeGroup] = useState("")
+  const [commonTags, setCommonTags] = useState("")
+
+  const isMounted = useRef(false)
 
   const initData = async () => {
-    const key = (await getTypefullyApiKey()) || ""
-    setApiKey(key)
+    // 获取保存的配置
+    const setting = await getSysSetting()
+    if (setting) {
+      setApiKey(setting.typefullyApiKey)
+      setJikeGroup(setting.jikeGroups)
+      setCommonTags(setting.commonTags)
+    }
 
-    const group = (await getJikeGroup()) || ""
-    setJikeGroup(group)
+    isMounted.current = true
   }
 
   useEffect(() => {
     initData()
   }, [])
 
-  const handleApiKeyChange = async (e: any) => {
-    setApiKey(e.target.value)
+  // 更新配置
+  useEffect(() => {
+    const doCache = async () => {
+      await setSysSetting({
+        typefullyApiKey: apiKey,
+        jikeGroups: jikeGroup,
+        commonTags: commonTags,
+      })
+    }
 
-    await setTypefullyApiKey(e.target.value)
+    if (!isMounted.current) {
+      return
+    }
+
+    doCache()
+  }, [apiKey, jikeGroup, commonTags])
+
+  const handleApiKeyChange = (e: any) => {
+    setApiKey(e.target.value)
   }
 
-  const handleJikeGroupChange = async (e: any) => {
+  const handleJikeGroupChange = (e: any) => {
     setJikeGroup(e.target.value)
+  }
 
-    await setStoreJikeGroup(e.target.value)
+  const handleCommonTagsChange = (e: any) => {
+    setCommonTags(e.target.value)
   }
 
   return (
@@ -70,6 +92,18 @@ export default function Settings() {
           <input
             value={jikeGroup}
             onChange={handleJikeGroupChange}
+            type="text"
+            placeholder="输入多个以英文逗号分隔"
+            className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3"
+          />
+        </div>
+      </div>
+      <div className="mt-5">
+        <h2 className="text-xl">常用标签</h2>
+        <div className="relative mt-3">
+          <input
+            value={commonTags}
+            onChange={handleCommonTagsChange}
             type="text"
             placeholder="输入多个以英文逗号分隔"
             className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3"

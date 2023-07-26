@@ -9,3 +9,6 @@ export const SETTING_TYPEFULLY_API_KEY: string = 'typefullyApiKey';
 export const SETTING_JIKE_GROUP: string = 'jikeGroup';
 
 export const PUBLISH_CONTENT: string = 'publishContent';
+
+// 系统配置
+export const SYS_SETTING: string = 'sysSetting';

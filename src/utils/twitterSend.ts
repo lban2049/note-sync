@@ -1,10 +1,15 @@
 import { PLATFORM_TWITTER } from "~utils/constant";
 import { getNoteToPublish, removeNoteToPublish } from "~utils/noteStorage"
-import { getTypefullyApiKey } from "./sysStorage";
+import { getSysSetting } from "./sysStorage";
 import { splitForTwitter } from "./content-utils";
 
 export async function twitterSend() {
-  const apiKey = await getTypefullyApiKey()
+  let apiKey = ''
+  const sysSetting = await getSysSetting()
+  if (sysSetting) {
+    apiKey = sysSetting.typefullyApiKey
+  }
+
   if (!apiKey) {
     console.log('没有设置typefully的API Key')
     return

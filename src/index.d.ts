@@ -13,4 +13,11 @@ interface AlertMsg {
 interface Note {
   content: string;
   jikeGroup: string;
+  tags: string[];
+}
+
+interface SysSetting {
+  typefullyApiKey: string;
+  jikeGroups: string;
+  commonTags: string;
 }
