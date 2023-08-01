@@ -8,6 +8,7 @@ import {
   selectInputText
 } from "~utils/content-utils"
 import { getNoteToPublish, removeNoteToPublish } from "~utils/noteStorage"
+import { getSysSetting } from "~utils/sysStorage"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://web.okjike.com/*"]
@@ -45,8 +46,22 @@ async function doSingleSend(note: NoteTask): Promise<boolean> {
     }
   }
 
+  let txtContent = note.note
+
+  // 获取配置的标签，即刻发布不带标签，去除内容中的标签
+  const setting = await getSysSetting()
+  if (setting && setting.commonTags && setting.commonTags.length > 0) {
+    const tags = setting.commonTags.split(",")
+
+    // 去除内容中的标签
+    for (let i = 0; i < tags.length; i++) {
+      const tag = tags[i]
+      txtContent = txtContent.replaceAll('#' + tag, "")
+    }
+  }
+
   // 输入信息
-  if (!selectInputText(".Input__StyledTextarea-sc-ld1ylk-0", note.note)) {
+  if (!selectInputText(".Input__StyledTextarea-sc-ld1ylk-0", txtContent)) {
     console.log("输入信息失败")
     return false
   }
