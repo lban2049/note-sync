@@ -20,4 +20,5 @@ interface SysSetting {
   typefullyApiKey: string;
   jikeGroups: string;
   commonTags: string;
+  darkMode: boolean;
 }

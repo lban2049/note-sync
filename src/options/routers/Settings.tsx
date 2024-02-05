@@ -13,14 +13,27 @@ export default function Settings() {
   const [commonTags, setCommonTags] = useState("")
 
   const isMounted = useRef(false)
+  const darkMode = useRef(false)
 
   const initData = async () => {
     // 获取保存的配置
     const setting = await getSysSetting()
     if (setting) {
-      setApiKey(setting.typefullyApiKey)
-      setJikeGroup(setting.jikeGroups)
-      setCommonTags(setting.commonTags)
+      if (setting.typefullyApiKey !== undefined) {
+        setApiKey(setting.typefullyApiKey)
+      }
+
+      if (setting.jikeGroups !== undefined) {
+        setJikeGroup(setting.jikeGroups)
+      }
+
+      if (setting.commonTags !== undefined) {
+        setCommonTags(setting.commonTags)
+      }
+
+      if (setting.darkMode !== undefined) {
+        darkMode.current = setting.darkMode
+      }
     }
 
     isMounted.current = true
@@ -37,6 +50,7 @@ export default function Settings() {
         typefullyApiKey: apiKey,
         jikeGroups: jikeGroup,
         commonTags: commonTags,
+        darkMode: darkMode.current
       })
     }
 
@@ -60,7 +74,7 @@ export default function Settings() {
   }
 
   return (
-    <div>
+    <div className="pb-2">
       <h1 className="text-2xl">配置</h1>
       <div className="mt-5">
         <h2 className="text-xl">TypeFully API Key</h2>
@@ -69,7 +83,7 @@ export default function Settings() {
             value={apiKey}
             onChange={handleApiKeyChange}
             type={showApiKey ? "text" : "password"}
-            className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3"
+            className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:focus:border-ar-400 dark:focus:shadow-ar-400"
           />
           <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer w-5 h-5">
             {showApiKey ? (
@@ -94,7 +108,7 @@ export default function Settings() {
             onChange={handleJikeGroupChange}
             type="text"
             placeholder="输入多个以英文逗号分隔"
-            className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3"
+            className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:focus:border-ar-400 dark:focus:shadow-ar-400"
           />
         </div>
       </div>
@@ -106,7 +120,7 @@ export default function Settings() {
             onChange={handleCommonTagsChange}
             type="text"
             placeholder="输入多个以英文逗号分隔"
-            className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3"
+            className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:focus:border-ar-400 dark:focus:shadow-ar-400"
           />
         </div>
       </div>

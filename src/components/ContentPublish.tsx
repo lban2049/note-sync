@@ -41,13 +41,15 @@ export default function ContentPublish() {
       }
       console.log('setting', setting)
 
-      const list = group.split(",")
-      setJikeGroupList(list)
+      if (group) {
+        const list = group.split(",")
+        setJikeGroupList(list)
+      }
 
-      const tagList = tags.split(",")
-      setCommonTags(tagList)
-
-      console.log('list', list, 'tagList', tagList)
+      if (tags) {
+        const tagList = tags.split(",")
+        setCommonTags(tagList)
+      }
 
       // 获取上次编辑内容
       const note = await getPublishContent()
@@ -175,7 +177,7 @@ export default function ContentPublish() {
       <h2 className="text-2xl">内容发布</h2>
       <div className="mt-5 relative">
         <textarea
-          className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3 focus:shadow-ar-600"
+          className="rounded-lg border border-ar-400 shadow shadow-ar-400 w-full focus:border-ar-600 outline-none text-base p-3 focus:shadow-ar-600 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400 dark:focus:border-ar-400 dark:focus:shadow-ar-400"
           style={{
             height: "240px"
           }}
@@ -191,7 +193,7 @@ export default function ContentPublish() {
       <div className="mt-5 flex items-center">
         <label className="mr-2 text-base w-32">即刻圈子</label>
         <Select.Root value={jikeGroup} onValueChange={onJikeGroupChange} name="jikeGroup">
-          <Select.Trigger className="outline-none w-64 h-10 text-center px-3 text-lg bg-ar-500 text-ar-50 rounded-md hover:bg-ar-600 flex items-center justify-between">
+          <Select.Trigger className="outline-none w-64 h-10 text-center px-3 text-lg bg-ar-500 shadow shadow-ar-400 text-ar-50 rounded-md hover:bg-ar-600 flex items-center justify-between dark:focus:border-ar-400 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-600">
             <Select.Value placeholder="选择圈子">
               {jikeGroup === "" ? "选择圈子" : jikeGroup}
             </Select.Value>
@@ -202,7 +204,7 @@ export default function ContentPublish() {
           <Select.Portal>
             <Select.Content
               position="popper"
-              className="bg-white border border-ar-400 rounded-md shadow shadow-ar-400 w-64">
+              className="bg-white border border-ar-400 rounded-md shadow shadow-ar-400 w-64 dark:bg-slate-600 dark:text-slate-400">
               {jikeGroupList.map((group, i) => {
                 return (
                   <Select.Item
@@ -230,7 +232,7 @@ export default function ContentPublish() {
             <div
               key={i}
               onClick={() => onSelectTag(tag)}
-              className="px-3 py-1 border border-ar-500 text-black text-base rounded-md mr-2 flex items-center cursor-pointer bg-ar-100">
+              className="px-3 py-1 border border-ar-500 text-black text-base rounded-md mr-2 flex items-center cursor-pointer bg-ar-100 dark:bg-slate-600 dark:text-slate-400">
               {"#" + tag}
             </div>
           )
@@ -245,13 +247,13 @@ export default function ContentPublish() {
       <div className="mt-5 px-5">
         <button
           onClick={doSend}
-          className="w-full h-10 text-center text-lg bg-ar-500 text-ar-50 rounded-md hover:bg-ar-600">
+          className="w-full h-10 text-center text-lg bg-ar-500 text-ar-50 rounded-md hover:bg-ar-600 dark:bg-slate-600 dark:hover:bg-slate-500 dark:text-slate-400">
           发布
         </button>
       </div>
       <div className="mt-5 flex items-center">
         <Checkbox.Root
-          className="w-6 h-6 bg-white border border-ar-400 rounded-md shadow shadow-ar-400 flex items-center justify-center hover:border-ar-600 hover:shadow-ar-600"
+          className="w-6 h-6 bg-white border border-ar-400 rounded-md shadow shadow-ar-400 flex items-center justify-center hover:border-ar-600 hover:sharow-ar-600 dark:bg-slate-600 dark:border-slate-400 dark:hover:border-ar-400 dark:hover:sharow-ar-400 dark:hover:bg-slate-500"
           checked={showTwitterPreview}
           onCheckedChange={(value) => {
             setShowTwitterPreview(value as boolean)
