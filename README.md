@@ -33,9 +33,19 @@ Chrome 应用商店地址：[Note Sync](https://chrome.google.com/webstore/detai
 
 ## 界面
 
-![内容发布](./docs/img/options-publish.png)
+![内容发布-暗黑](./docs/img/publish-dark-240205.png)
 
-![配置](./docs/img/options-setting.png)
+![内容发布](./docs/img/publish-light-240205.png)
+
+![配置-暗黑](./docs/img/setting-dark-240205.png)
+
+![配置](./docs/img/setting-light-240205.png)
+
+## 版本更新
+
+### 0.1.3
+
+- 增加暗黑模式。
 
 ## 开发
 
