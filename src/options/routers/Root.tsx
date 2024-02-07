@@ -56,7 +56,7 @@ export default function Root() {
   }
 
   return (
-    <div className="w-full h-full dark:bg-slate-900 dark:text-slate-400">
+    <div className="w-full h-full dark:bg-slate-900 dark:text-slate-400 overflow-auto">
       <div className="p-5 max-w-5xl m-auto">
         <div className="flex overflow-hidden">
           <div
