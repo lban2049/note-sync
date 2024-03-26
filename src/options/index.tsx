@@ -7,6 +7,7 @@ import "../index.css"
 
 import PublishContent from "./routers/PublishContent"
 import Settings from "./routers/Settings"
+import PublishHistory from "./routers/PublishHistory"
 
 const router = createHashRouter([
   {
@@ -20,7 +21,11 @@ const router = createHashRouter([
       {
         path: "/setting",
         element: <Settings />
-      }
+      },
+      {
+        path: "/history",
+        element: <PublishHistory />
+      },
     ]
   }
 ])

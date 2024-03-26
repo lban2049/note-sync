@@ -95,3 +95,16 @@ ${i + 1}/${newMsgs.length}`)
 
   return newMsgs2
 }
+
+// 获取当前时间，格式 yyyy-MM-dd HH:mm:ss
+export function getCurrentTimeStr() {
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hour = date.getHours()
+  const minute = date.getMinutes()
+  const second = date.getSeconds()
+
+  return `${year}-${month}-${day} ${hour}:${minute}:${second}`
+}

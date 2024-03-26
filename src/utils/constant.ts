@@ -12,3 +12,6 @@ export const PUBLISH_CONTENT: string = 'publishContent';
 
 // 系统配置
 export const SYS_SETTING: string = 'sysSetting';
+
+// 发布历史
+export const PUBLISH_HISTORY: string = 'publishHistory';

@@ -82,6 +82,11 @@ export default function Root() {
                   </NavLink>
                 </li>
                 <li className={`mt-3`}>
+                  <NavLink className={getItemCss} to="/history">
+                    发布历史
+                  </NavLink>
+                </li>
+                <li className={`mt-3`}>
                   <NavLink className={getItemCss} to="/setting">
                     配置
                   </NavLink>

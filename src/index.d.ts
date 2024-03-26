@@ -14,6 +14,7 @@ interface Note {
   content: string;
   jikeGroup: string;
   tags: string[];
+  publishDate?: string;
 }
 
 interface SysSetting {
@@ -21,4 +22,8 @@ interface SysSetting {
   jikeGroups: string;
   commonTags: string;
   darkMode: boolean;
+}
+
+interface HistoryNotes {
+  notes: Note[];
 }

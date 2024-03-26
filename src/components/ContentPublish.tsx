@@ -9,13 +9,14 @@ import { useEffect, useRef, useState } from "react"
 
 import { sendToBackground } from "@plasmohq/messaging"
 
-import { awaitSleep, splitForTwitter } from "~utils/content-utils"
+import { awaitSleep, getCurrentTimeStr, splitForTwitter } from "~utils/content-utils"
 import { setNoteToPublish } from "~utils/noteStorage"
 import {
   getPublishContent,
   getSysSetting,
   setPublishContent
 } from "~utils/sysStorage"
+import { addHistory } from "~utils/historyStorage"
 
 export default function ContentPublish() {
   const [content, setContent] = useState("")
@@ -123,18 +124,24 @@ export default function ContentPublish() {
       return
     }
 
-    await setNoteToPublish({
+    const note: Note = {
       content,
       jikeGroup,
-      tags: selectTags
-    })
+      tags: selectTags,
+      publishDate: getCurrentTimeStr(),
+    }
 
-    const resp = await sendToBackground({
-      name: "send",
-      body: {}
-    })
+    // await setNoteToPublish(note)
 
-    console.log(resp)
+    // 保存发布历史
+    await addHistory(note)
+
+    // const resp = await sendToBackground({
+    //   name: "send",
+    //   body: {}
+    // })
+
+    // console.log(resp)
 
     setAlertMsg({
       msg: "执行发布",
