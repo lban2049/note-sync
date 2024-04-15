@@ -131,17 +131,17 @@ export default function ContentPublish() {
       publishDate: getCurrentTimeStr(),
     }
 
-    // await setNoteToPublish(note)
+    await setNoteToPublish(note)
 
     // 保存发布历史
     await addHistory(note)
 
-    // const resp = await sendToBackground({
-    //   name: "send",
-    //   body: {}
-    // })
+    const resp = await sendToBackground({
+      name: "send",
+      body: {}
+    })
 
-    // console.log(resp)
+    console.log(resp)
 
     setAlertMsg({
       msg: "执行发布",
